@@ -12,20 +12,20 @@ const app = express();
 
 // DATE
 const authors = [
-  { id: 1, name: "J. K. Rowling" },
-  { id: 2, name: "J. R. R. Tolkien" },
-  { id: 3, name: "Brent Weeks" }
+  { id: 0, name: "J. K. Rowling" },
+  { id: 1, name: "J. R. R. Tolkien" },
+  { id: 2, name: "Brent Weeks" }
 ];
 
 const books = [
-  { id: 1, name: "Harry Potter and the Chamber of Secrets", authorId: 1 },
-  { id: 2, name: "Harry Potter and the Prisoner of Azkaban", authorId: 1 },
-  { id: 3, name: "Harry Potter and the Goblet of Fire", authorId: 1 },
-  { id: 4, name: "The Fellowship of the Ring", authorId: 2 },
-  { id: 5, name: "The Two Towers", authorId: 2 },
-  { id: 6, name: "The Return of the King", authorId: 2 },
-  { id: 7, name: "The Way of Shadows", authorId: 3 },
-  { id: 8, name: "Beyond the Shadows", authorId: 3 }
+  { id: 0, name: "Harry Potter and the Chamber of Secrets", authorId: 1 },
+  { id: 1, name: "Harry Potter and the Prisoner of Azkaban", authorId: 1 },
+  { id: 2, name: "Harry Potter and the Goblet of Fire", authorId: 1 },
+  { id: 3, name: "The Fellowship of the Ring", authorId: 2 },
+  { id: 4, name: "The Two Towers", authorId: 2 },
+  { id: 5, name: "The Return of the King", authorId: 2 },
+  { id: 6, name: "The Way of Shadows", authorId: 3 },
+  { id: 7, name: "Beyond the Shadows", authorId: 3 }
 ];
 // END - DATE
 
@@ -92,6 +92,30 @@ const RootQueryType = new GraphQLObjectType({
   })
 });
 
+const RootMutationType = new GraphQLObjectType({
+  name: "Mutation",
+  description: "Root Mutation",
+  fields: () => ({
+    addBook: {
+      type: BookType,
+      description: "Add a new book",
+      args: {
+        name: { type: GraphQLNonNull(GraphQLString) },
+        authorId: { type: GraphQLNonNull(GraphQLInt) }
+      },
+      resolve: (parent, args) => {
+        const book = {
+          id: books.lenght + 1,
+          name: args.name,
+          authorId: args.authorId
+        };
+        books.push(book);
+        return book;
+      }
+    }
+  })
+});
+
 // const schema = new GraphQLSchema({
 //   query: new GraphQLObjectType({
 //     name: "HelloWorld",
@@ -105,7 +129,8 @@ const RootQueryType = new GraphQLObjectType({
 // });
 
 const schema = new GraphQLSchema({
-  query: RootQueryType
+  query: RootQueryType,
+  mutation: RootMutationType
 });
 
 app.use(
