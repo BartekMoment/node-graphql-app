@@ -131,18 +131,6 @@ const RootMutationType = new GraphQLObjectType({
   })
 });
 
-// const schema = new GraphQLSchema({
-//   query: new GraphQLObjectType({
-//     name: "HelloWorld",
-//     fields: () => ({
-//       message: {
-//         type: GraphQLString,
-//         resolve: () => "Hello World"
-//       }
-//     })
-//   })
-// });
-
 const schema = new GraphQLSchema({
   query: RootQueryType,
   mutation: RootMutationType
